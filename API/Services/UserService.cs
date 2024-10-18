@@ -22,9 +22,9 @@ namespace API.Services
             return _mapper.Map<IEnumerable<AppUserDto>>(users);
         }
 
-        public async Task<AppUserDto> GetUserByUsernameAsync(string username)
+        public async Task<AppUserDto> GetUserByEmailAsync(string email)
         {
-            var user = await _userRepository.GetUserByUsernameAsync(username);
+            var user = await _userRepository.GetUserByEmailAsync(email);
             return _mapper.Map<AppUserDto>(user);
         }
     }

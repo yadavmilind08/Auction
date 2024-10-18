@@ -484,3 +484,6 @@ $RECYCLE.BIN/
 *.swp
 .vscode/settings.json
 .vscode/launch.json
+API/auction.db
+API/auction.db-shm
+API/auction.db-wal

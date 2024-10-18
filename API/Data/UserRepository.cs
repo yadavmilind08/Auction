@@ -17,9 +17,9 @@ namespace API.Data
            return await _context.Users.FindAsync(id);
         }
 
-        public async Task<AppUser> GetUserByUsernameAsync(string username)
+        public async Task<AppUser> GetUserByEmailAsync(string email)
         {
-            return await _context.Users.SingleOrDefaultAsync(x => x.UserName == username);
+            return await _context.Users.SingleOrDefaultAsync(x => x.Email == email);
         }
 
         public async Task<IEnumerable<AppUser>> GetUsersAsync()
@@ -43,9 +43,9 @@ namespace API.Data
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> UserExistsAsync(string username)
+        public async Task<bool> UserExistsAsync(string email)
         {
-            return await _context.Users.AnyAsync(x => x.UserName == username.ToLower());
+            return await _context.Users.AnyAsync(x => x.Email.Equals(email, StringComparison.CurrentCultureIgnoreCase));
         }
     }
 }

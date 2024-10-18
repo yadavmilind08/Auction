@@ -19,7 +19,7 @@ namespace API.Services
 
         public async Task<UserDto> RegisterAsync(RegisterDto registerDto)
         {
-            if (await _userRepository.UserExistsAsync(registerDto.Username))
+            if (await _userRepository.UserExistsAsync(registerDto.Email))
             {
                 throw new InvalidOperationException("Username is taken");
             }
@@ -46,7 +46,7 @@ namespace API.Services
 
         public async Task<UserDto> LoginAsync(LoginDto loginDto)
         {
-            var user = await _userRepository.GetUserByUsernameAsync(loginDto.Email);
+            var user = await _userRepository.GetUserByEmailAsync(loginDto.Email);
 
             if (user == null)
             {

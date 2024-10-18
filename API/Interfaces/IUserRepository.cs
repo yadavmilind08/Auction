@@ -8,8 +8,8 @@ namespace API.Interfaces
         Task<bool> SaveAllAsync();
         Task<IEnumerable<AppUser>> GetUsersAsync();
         Task<AppUser> GetUserByIdAsync(int id);
-        Task<AppUser> GetUserByUsernameAsync(string username);
+        Task<AppUser> GetUserByEmailAsync(string email);
         Task AddUserAsync(AppUser user);
-        Task<bool> UserExistsAsync(string username);
+        Task<bool> UserExistsAsync(string email);
     }
 }
