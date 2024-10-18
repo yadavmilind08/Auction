@@ -3,7 +3,7 @@ import LoginSceneImage from "../../assets/images/login-scene.svg";
 
 const Login = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="flex items-center justify-center">
       <div className="container mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 p-6">
         <div className="lg:col-span-1 flex flex-col justify-center px-6 py-12 sm:max-w-sm sm:mx-auto lg:px-8">
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">
