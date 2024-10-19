@@ -1,7 +1,55 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { Link, useNavigate } from "react-router-dom";
 import LoginSceneImage from "../../assets/images/login-scene.svg";
+import { post } from "../../services/api";
+import { IUser } from "../../types/User";
+
+const schema = yup.object().shape({
+  email: yup
+    .string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  password: yup
+    .string()
+    .required("Password is required")
+    .min(4, "Password must be at least 4 characters"),
+});
 
 const Login = () => {
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onSubmit = async (data: any) => {
+    setErrorMessage(null);
+
+    try {
+      const response = await post("/account/login", {
+        email: data.email,
+        password: data.password,
+      });
+
+      const { token } = response as IUser;
+      localStorage.setItem("token", token);
+
+      navigate("/dashboard");
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      setErrorMessage("Login failed. Please check your credentials.");
+    }
+  };
+
   return (
     <div className="flex items-center justify-center">
       <div className="container mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 p-6">
@@ -16,23 +64,28 @@ const Login = () => {
           </div>
 
           <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form action="#" method="POST" className="space-y-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div>
                 <label
                   htmlFor="email"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Email Address
+                  Email Address <span className="text-red-500">*</span>
                 </label>
                 <div className="mt-2">
                   <input
                     id="email"
-                    name="email"
                     type="email"
-                    required
-                    autoComplete="email"
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    {...register("email")}
+                    className={`block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ${
+                      errors.email ? "ring-red-500" : "ring-gray-300"
+                    } placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`}
                   />
+                  {errors.email && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.email.message}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -42,7 +95,7 @@ const Login = () => {
                     htmlFor="password"
                     className="block text-sm font-medium leading-6 text-gray-900"
                   >
-                    Password
+                    Password <span className="text-red-500">*</span>
                   </label>
                   <div className="text-sm">
                     <a
@@ -56,12 +109,17 @@ const Login = () => {
                 <div className="mt-2">
                   <input
                     id="password"
-                    name="password"
                     type="password"
-                    required
-                    autoComplete="current-password"
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    {...register("password")}
+                    className={`block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ${
+                      errors.password ? "ring-red-500" : "ring-gray-300"
+                    } placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`}
                   />
+                  {errors.password && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.password.message}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -74,6 +132,12 @@ const Login = () => {
                 </button>
               </div>
             </form>
+
+            {errorMessage && (
+              <p className="mt-4 text-center text-red-500 text-sm">
+                {errorMessage}
+              </p>
+            )}
 
             <p className="mt-10 text-center text-sm text-gray-500">
               Don’t have an Account?{" "}
