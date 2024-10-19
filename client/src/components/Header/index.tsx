@@ -4,7 +4,7 @@ import profileImage from "../../assets/images/profile.svg";
 
 const Header = () => {
   return (
-    <header className="bg-pink-200 flex justify-between items-center p-4 shadow-md">
+    <header className="bg-pink-200 flex justify-between p-4 shadow-md fixed top-0 w-full z-10">
       <div className="container mx-auto flex items-center justify-between">
         <Link to="/" className="flex items-center">
           <img src={logoImage} alt="Logo" className="h-8 w-8 mr-2" />
