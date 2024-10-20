@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import Card from "../../components/Card";
 
 const items = [
@@ -95,6 +96,8 @@ const items = [
 ];
 
 const Home = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="container mx-auto py-10">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 px-6">
@@ -106,6 +109,7 @@ const Home = () => {
             minimumBid={item.minimumBid}
             currentBid={item.currentBid}
             timeLeft={item.timeLeft}
+            onClick={() => navigate(`/bid/detail/${index}`)}
           />
         ))}
       </div>

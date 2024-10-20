@@ -1,6 +1,19 @@
-import { IBidItem } from "../../types/BidItem";
-
-const Card = ({ image, title, minimumBid, currentBid, timeLeft }: IBidItem) => {
+type CardProp = {
+  image: string;
+  title: string;
+  minimumBid: number;
+  currentBid: number;
+  timeLeft: string;
+  onClick?: () => void;
+};
+const Card = ({
+  image,
+  title,
+  minimumBid,
+  currentBid,
+  timeLeft,
+  onClick,
+}: CardProp) => {
   return (
     <div className="border rounded-lg shadow-md p-4 overflow-hidden">
       <img
@@ -14,7 +27,10 @@ const Card = ({ image, title, minimumBid, currentBid, timeLeft }: IBidItem) => {
       <p className="text-gray-500">Current Bid</p>
       <p className="text-xl font-bold">${currentBid}</p>
       <p className="text-gray-500">Ends in: {timeLeft}</p>
-      <button className="mt-4 w-full bg-red-500 text-white py-2 rounded-lg">
+      <button
+        className="mt-4 w-full bg-red-500 text-white py-2 rounded-lg"
+        onClick={onClick}
+      >
         Bid now
       </button>
     </div>

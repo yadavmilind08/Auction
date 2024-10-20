@@ -12,6 +12,7 @@ import Signup from "./pages/Signup";
 import Signedup from "./pages/Signedup";
 import { useAuth } from "./hooks/useAuth";
 import Landing from "./pages/Landing";
+import BidDetail from "./pages/BidDetail";
 
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
   const { isAuthenticated } = useAuth();
@@ -35,6 +36,14 @@ const AppRoutes = () => {
             element={
               <PrivateRoute>
                 <Home />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/bid/detail/:id"
+            element={
+              <PrivateRoute>
+                <BidDetail />
               </PrivateRoute>
             }
           />
