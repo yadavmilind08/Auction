@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import LoginSceneImage from "../../assets/images/login-scene.svg";
 import { post } from "../../services/api";
 import { IUser } from "../../types/User";
+import { useAuth } from "../../hooks/useAuth";
 
 const schema = yup.object().shape({
   email: yup
@@ -21,6 +22,7 @@ const schema = yup.object().shape({
 const Login = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const {
     register,
@@ -41,9 +43,12 @@ const Login = () => {
       });
 
       const { token } = response as IUser;
-      localStorage.setItem("token", token);
 
-      navigate("/dashboard");
+      if (token) {
+        login(token);
+        navigate("/dashboard");
+      }
+
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       setErrorMessage("Login failed. Please check your credentials.");
@@ -77,7 +82,7 @@ const Login = () => {
                     id="email"
                     type="email"
                     {...register("email")}
-                    className={`block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ${
+                    className={`block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ${
                       errors.email ? "ring-red-500" : "ring-gray-300"
                     } placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`}
                   />
@@ -111,7 +116,7 @@ const Login = () => {
                     id="password"
                     type="password"
                     {...register("password")}
-                    className={`block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ${
+                    className={`block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ${
                       errors.password ? "ring-red-500" : "ring-gray-300"
                     } placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`}
                   />

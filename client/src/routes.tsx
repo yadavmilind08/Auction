@@ -16,7 +16,11 @@ import Landing from "./pages/Landing";
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
   const { isAuthenticated } = useAuth();
 
-  return isAuthenticated ? children : <Navigate to="/auth/login" />;
+  // Fallback to checking localStorage directly
+  const token = localStorage.getItem("token");
+  const isUserAuthenticated = isAuthenticated || !!token;
+
+  return isUserAuthenticated ? children : <Navigate to="/auth/login" />;
 };
 
 const AppRoutes = () => {
