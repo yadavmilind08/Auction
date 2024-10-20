@@ -5,8 +5,6 @@ export const useAuth = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const value = !!token;
-    console.log({ value });
     setIsAuthenticated(!!token);
   }, []);
 

@@ -1,7 +1,13 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link, Navigate, Outlet } from "react-router-dom";
 import logo from "../../assets/images/logo.svg";
 
 const AuthLayout = () => {
+  const isAuthenticated = !!localStorage.getItem("token");
+
+  if (isAuthenticated) {
+    return <Navigate to={"/dashboard"} replace />;
+  }
+
   return (
     <div className="min-h-screen flex flex-col">
       <header className="bg-gray-200 py-4 px-6 shadow-md fixed w-full z-50">
