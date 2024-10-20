@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import signedupSceneImage from "../../assets/images/signedup-scene.svg";
 
 const Signedup = () => {
@@ -19,9 +20,11 @@ const Signedup = () => {
       </div>
 
       <div className="mt-10">
-        <button className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded-full font-medium text-sm">
-          Login now
-        </button>
+        <Link to="/auth/login">
+          <button className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded-full font-medium text-sm">
+            Login now
+          </button>
+        </Link>
       </div>
     </div>
   );

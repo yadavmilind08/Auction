@@ -1,7 +1,53 @@
-import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { Link, useNavigate } from "react-router-dom";
 import signupSceneImage from "../../assets/images/signup-scene.svg";
+import { post } from "../../services/api";
+import { IUser } from "../../types/User";
+
+// Define validation schema using yup
+const schema = yup.object().shape({
+  userName: yup.string().required("User Name is required"),
+  email: yup
+    .string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  password: yup
+    .string()
+    .min(4, "Password must be at least 4 characters")
+    .required("Password is required"),
+});
 
 const Signup = () => {
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onSubmit = async (data: any) => {
+    try {
+      const response = await post("/account/register", {
+        username: data.userName,
+        email: data.email,
+        password: data.password,
+      });
+      const { token } = response as IUser;
+      if (token) {
+        navigate("/auth/signedup");
+      }
+    } catch (error) {
+      console.error("Registration failed:", error);
+      // Handle error (e.g., show error message)
+    }
+  };
+
   return (
     <div className="flex items-center justify-center">
       <div className="container mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 p-6 h-screen">
@@ -17,7 +63,7 @@ const Signup = () => {
           </div>
 
           <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form action="#" method="POST" className="space-y-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div>
                 <label
                   htmlFor="userName"
@@ -28,12 +74,15 @@ const Signup = () => {
                 <div className="mt-2">
                   <input
                     id="userName"
-                    name="userName"
                     type="text"
-                    required
-                    autoComplete="userName"
+                    {...register("userName")}
                     className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
+                  {errors.userName && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.userName.message}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -47,12 +96,15 @@ const Signup = () => {
                 <div className="mt-2">
                   <input
                     id="email"
-                    name="email"
                     type="email"
-                    required
-                    autoComplete="email"
+                    {...register("email")}
                     className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
+                  {errors.email && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.email.message}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -66,12 +118,15 @@ const Signup = () => {
                 <div className="mt-2">
                   <input
                     id="password"
-                    name="password"
                     type="password"
-                    required
-                    autoComplete="current-password"
+                    {...register("password")}
                     className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
+                  {errors.password && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.password.message}
+                    </p>
+                  )}
                 </div>
               </div>
 

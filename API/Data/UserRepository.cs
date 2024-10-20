@@ -45,7 +45,7 @@ namespace API.Data
 
         public async Task<bool> UserExistsAsync(string email)
         {
-            return await _context.Users.AnyAsync(x => x.Email.Equals(email, StringComparison.CurrentCultureIgnoreCase));
+            return await _context.Users.AnyAsync(x => x.Email.ToLower() == email.ToLower());
         }
     }
 }
