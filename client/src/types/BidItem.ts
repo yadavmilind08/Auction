@@ -1,7 +1,7 @@
 export interface IBidItem extends Record<string, unknown> {
-  image: string;
-  title: string;
-  minimumBid: number;
-  currentBid: number;
-  timeLeft: string;
+  id: string;
+  amount: number;
+  IsStraightBid: boolean;
+  auctionItemId: number;
+  UserId: string;
 }

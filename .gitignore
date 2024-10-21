@@ -487,3 +487,4 @@ $RECYCLE.BIN/
 API/auction.db
 API/auction.db-shm
 API/auction.db-wal
+*.db

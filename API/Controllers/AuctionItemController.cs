@@ -17,6 +17,7 @@ namespace API.Controllers
             _bidService = bidService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AuctionItemDto>>> GetAuctionItems()
         {
