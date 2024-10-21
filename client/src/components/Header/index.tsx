@@ -3,12 +3,14 @@ import logoImage from "../../assets/images/logo.svg";
 import profileImage from "../../assets/images/profile.svg";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
+import useUserStore from "../../store/useUserStore";
 
 const Header = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement | null>(null);
   const { logout, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const clearUser = useUserStore((state) => state.clearUser);
 
   const toggleProfileMenu = () => {
     setIsProfileOpen(!isProfileOpen);
@@ -35,6 +37,7 @@ const Header = () => {
 
   const onSignout = () => {
     logout();
+    clearUser();
     navigate("/auth/login");
   };
 

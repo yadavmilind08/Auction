@@ -8,5 +8,5 @@ export interface IAuctionItem extends Record<string, unknown> {
   currentBid: number;
   endDate: string;
   UserId: number;
-  Bids: IBidItem[];
+  bids: IBidItem[];
 }

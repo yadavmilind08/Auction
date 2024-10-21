@@ -7,6 +7,7 @@ import LoginSceneImage from "../../assets/images/login-scene.svg";
 import { post } from "../../services/api";
 import { IUser } from "../../types/User";
 import { useAuth } from "../../hooks/useAuth";
+import useUserStore from "../../store/useUserStore";
 
 const schema = yup.object().shape({
   email: yup
@@ -23,6 +24,7 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const navigate = useNavigate();
   const { login } = useAuth();
+  const setUser = useUserStore((state) => state.setUser);
 
   const {
     register,
@@ -46,6 +48,7 @@ const Login = () => {
 
       if (token) {
         login(token);
+        setUser(response as IUser);
         navigate("/dashboard");
       }
 

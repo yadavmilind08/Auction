@@ -44,7 +44,7 @@ const Home = () => {
               minimumBid={item.minimumBid}
               currentBid={item.currentBid}
               endDate={item.endDate}
-              onClick={() => navigate(`/bid/detail/${index}`)}
+              onClick={() => navigate(`/bid/detail/${item.id}`)}
             />
           ))}
         </div>
