@@ -38,6 +38,7 @@ namespace API.Services
 
             return new UserDto
             {
+                Id = user.Id,
                 Username = user.UserName,
                 Email = user.Email,
                 Token = _tokenService.CreateToken(user)
@@ -66,6 +67,7 @@ namespace API.Services
 
             return new UserDto
             {
+                Id = user.Id,
                 Username = user.UserName,
                 Email = user.Email,
                 Token = _tokenService.CreateToken(user)

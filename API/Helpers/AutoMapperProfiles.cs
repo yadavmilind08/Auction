@@ -9,6 +9,8 @@ namespace API.Helpers
         public AutoMapperProfiles()
         {
             CreateMap<AppUser, AppUserDto>();
+            CreateMap<AuctionItem, AuctionItemDto>().ReverseMap();
+            CreateMap<Bid, BidDto>().ReverseMap();
         }
     }
 }

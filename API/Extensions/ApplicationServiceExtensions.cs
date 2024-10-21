@@ -18,9 +18,13 @@ namespace API.Extensions
 
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IAuctionItemRepository, AuctionItemRepository>();
+            services.AddScoped<IBidRepository, BidRepository>();
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAccountSevice, AccountService>();
+            services.AddScoped<IAuctionItemService, AuctionItemService>();
+            services.AddScoped<IBidService, BidService>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
