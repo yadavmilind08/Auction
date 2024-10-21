@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { post } from "../../services/api";
+import { post, put } from "../../services/api";
 import useUserStore from "../../store/useUserStore";
+import { IAuctionItem } from "../../types/AuctionItem";
 
 interface IFormInputs extends Record<string, unknown> {
   title: string;
@@ -29,12 +30,14 @@ interface CreateAuctionModalProps {
   isOpen: boolean;
   onClose: () => void;
   onItemCreated: () => void;
+  editingItem?: IAuctionItem | null;
 }
 
 const CreateAuctionModal: React.FC<CreateAuctionModalProps> = ({
   isOpen,
   onClose,
   onItemCreated,
+  editingItem,
 }) => {
   const [loading, setLoading] = useState(false);
   const user = useUserStore((state) => state.user);
@@ -54,6 +57,20 @@ const CreateAuctionModal: React.FC<CreateAuctionModalProps> = ({
     },
   });
 
+  useEffect(() => {
+    if (editingItem) {
+      // Set form values when editing an item
+      reset(editingItem);
+    } else {
+      reset({
+        title: "",
+        description: "",
+        minimumBid: 0,
+        currentBid: 0,
+      });
+    }
+  }, [editingItem, reset]);
+
   const onSubmit = async (data: IFormInputs) => {
     setLoading(true); // Start loading state
     try {
@@ -64,7 +81,11 @@ const CreateAuctionModal: React.FC<CreateAuctionModalProps> = ({
         userId: user?.id,
       };
 
-      await post("/auctionItems", parsedData);
+      if (editingItem) {
+        await put(`/auctionItems/${editingItem.id}`, parsedData);
+      } else {
+        await post(`/auctionItems`, parsedData);
+      }
       onItemCreated();
       onClose();
     } catch (error) {
@@ -79,7 +100,9 @@ const CreateAuctionModal: React.FC<CreateAuctionModalProps> = ({
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white p-6 rounded-md w-96">
-        <h2 className="text-xl font-bold mb-4">Create Auction Item</h2>
+        <h2 className="text-xl font-bold mb-4">
+          {editingItem ? "Update" : "Create"} Auction Item
+        </h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
             <label htmlFor="title" className="block text-sm mb-1">
@@ -158,7 +181,8 @@ const CreateAuctionModal: React.FC<CreateAuctionModalProps> = ({
               className="px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700"
               disabled={loading} // Disable button when loading
             >
-              {loading && <span className="spinner-border mr-2" />} Create
+              {loading && <span className="spinner-border mr-2" />}{" "}
+              {editingItem ? "Update" : "Create"}
             </button>
           </div>
         </form>
