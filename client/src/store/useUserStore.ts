@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import { IUser } from "../types/User";
 
 interface UserStore {
@@ -7,10 +8,17 @@ interface UserStore {
   clearUser: () => void;
 }
 
-const useUserStore = create<UserStore>((set) => ({
-  user: null,
-  setUser: (userData) => set({ user: userData }),
-  clearUser: () => set({ user: null }),
-}));
+const useUserStore = create<UserStore>()(
+  persist(
+    (set) => ({
+      user: null,
+      setUser: (userData: IUser) => set({ user: userData }),
+      clearUser: () => set({ user: null }),
+    }),
+    {
+      name: "user-store",
+    }
+  )
+);
 
 export default useUserStore;

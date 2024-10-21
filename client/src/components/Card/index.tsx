@@ -22,19 +22,29 @@ const Card = ({
         alt={title}
         className="w-full h-40 object-cover rounded-lg"
       />
-      <div className="mt-4 text-sm font-semibold">
+      <div className="my-4 text-sm font-semibold">
         {calculateTimeDifference(endDate) === AUCTION_ENDED ? (
           <span className="text-red-600">Auction Ended</span>
         ) : (
           <span className="text-green-600">Live Auction</span>
         )}
       </div>
+
       <h2 className="text-lg font-semibold mt-2">{title}</h2>
-      <p className="text-gray-500">Minimum Bid</p>
-      <p className="text-xl font-bold">${minimumBid}</p>
-      <p className="text-gray-500">Current Bid</p>
-      <p className="text-xl font-bold">${currentBid}</p>
-      <p className="text-gray-500">
+      <div className="mb-2">
+        <div className="flex justify-between items-center">
+          <p className="text-sm text-gray-500">Minimum Bid</p>
+          <p className="text-lg font-bold">${minimumBid}</p>
+        </div>
+      </div>
+
+      <div className="mb-2">
+        <div className="flex justify-between items-center">
+          <p className="text-sm text-gray-500">Current Bid</p>
+          <p className="text-lg font-bold">${currentBid}</p>
+        </div>
+      </div>
+      <p className="text-sm text-gray-500 mb-2">
         Ends in: {calculateTimeDifference(endDate)}
       </p>
       <button

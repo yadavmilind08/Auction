@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { AiOutlineArrowLeft } from "react-icons/ai";
 import { get, post } from "../../services/api";
 import { IAuctionItem } from "../../types/AuctionItem";
 import Loader from "../../components/Loader/Index";
@@ -73,27 +74,14 @@ const BidDetail = () => {
                 className="flex items-center text-blue-600 hover:underline"
                 onClick={() => navigate(-1)} // Navigate back
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-5 h-5 mr-1"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
+                <AiOutlineArrowLeft className="mr-2 h-5 w-5" />
                 Back to catalog
               </button>
             </div>
             <img
               src="/" //TODO
               alt={auctionItem?.title}
-              className="w-full h-auto rounded-lg"
+              className="w-full h-40 object-cover rounded-lg"
             />
             <div className="mt-4 text-sm font-semibold">
               {auctionItem?.endDate &&
@@ -104,11 +92,24 @@ const BidDetail = () => {
                 <span className="text-green-600">Live Auction</span>
               )}
             </div>
-            <h2 className="mt-2 text-xl font-bold">{auctionItem?.title}</h2>
-            <p className="text-gray-600">Minimum Bid</p>
-            <p className="text-2xl font-bold">${auctionItem?.minimumBid}</p>
-            <p className="text-gray-600">Current Bid</p>
-            <p className="text-2xl font-bold">${auctionItem?.currentBid}</p>
+            <h2 className="my-2 text-xl font-bold">{auctionItem?.title}</h2>
+            <div className="mb-2">
+              <div className="flex justify-between items-center">
+                <p className="text-sm text-gray-500">Minimum Bid</p>
+                <p className="text-lg font-bold mr-4">
+                  ${auctionItem?.minimumBid}
+                </p>
+              </div>
+            </div>
+
+            <div className="mb-2">
+              <div className="flex justify-between items-center">
+                <p className="text-sm text-gray-500">Current Bid</p>
+                <p className="text-lg font-bold mr-4">
+                  ${auctionItem?.currentBid}
+                </p>
+              </div>
+            </div>
             {auctionItem?.endDate && (
               <p className="mt-4 text-gray-500">
                 Ends in: {calculateTimeDifference(auctionItem?.endDate)}

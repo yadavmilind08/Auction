@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import { FaChevronDown } from "react-icons/fa";
 import logoImage from "../../assets/images/logo.svg";
 import profileImage from "../../assets/images/profile.svg";
 import { useEffect, useRef, useState } from "react";
@@ -11,6 +12,7 @@ const Header = () => {
   const { logout, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const clearUser = useUserStore((state) => state.clearUser);
+  const user = useUserStore((state) => state.user);
 
   const toggleProfileMenu = () => {
     setIsProfileOpen(!isProfileOpen);
@@ -26,10 +28,7 @@ const Header = () => {
   };
 
   useEffect(() => {
-    // Add event listener for clicks outside
     document.addEventListener("mousedown", handleClickOutside);
-
-    // Cleanup event listener when the component unmounts
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -52,72 +51,86 @@ const Header = () => {
         </Link>
 
         {isAuthenticated ? (
-          <div className="flex items-center space-x-4 relative">
-            <img
-              src={profileImage}
-              alt="Profile"
-              className="h-10 w-10 rounded-full"
-              onClick={toggleProfileMenu}
-            />
-
-            {isProfileOpen && (
-              <div
-                ref={profileRef}
-                className="absolute right-0 top-10 w-56 bg-white rounded-lg shadow-lg z-20"
+          <div className="flex items-center space-x-6 relative">
+            {/* Navigation Links */}
+            <nav className="hidden  md:flex">
+              <Link
+                to="/dashboard"
+                className="text-gray-500 hover:text-gray-900 font-medium mr-1 flex items-center"
               >
-                <div className="p-4 flex items-center">
-                  <img
-                    src={profileImage}
-                    alt="Profile"
-                    className="w-10 h-10 rounded-full mr-3"
-                  />
-                  <div>
-                    <h4 className="font-semibold">Olivia Rhye</h4>
-                    <p className="text-sm text-gray-500">
-                      olivia@untitledui.com
-                    </p>
+                <span className="mr-1">Auctions</span>
+                <FaChevronDown />
+              </Link>
+            </nav>
+
+            {/* Profile Section */}
+            <div className="flex items-center space-x-4">
+              <img
+                src={profileImage}
+                alt="Profile"
+                className="h-10 w-10 rounded-full cursor-pointer"
+                onClick={toggleProfileMenu}
+              />
+
+              {isProfileOpen && (
+                <div
+                  ref={profileRef}
+                  className="absolute right-0 top-12 w-56 bg-white rounded-lg shadow-lg z-20"
+                >
+                  <div className="p-4 flex items-center">
+                    <img
+                      src={profileImage}
+                      alt="Profile"
+                      className="w-10 h-10 rounded-full mr-3"
+                    />
+                    <div>
+                      <h4 className="font-semibold">{user?.username}</h4>
+                      <p className="text-sm text-gray-500">{user?.email}</p>
+                    </div>
+                  </div>
+                  <hr />
+                  {/* <ul className="p-4">
+                    <li className="p-2 hover:bg-gray-100 cursor-pointer">
+                      View profile
+                    </li>
+                    <li className="p-2 hover:bg-gray-100 cursor-pointer">
+                      Settings
+                    </li>
+                    <li className="p-2 hover:bg-gray-100 cursor-pointer">
+                      My bids
+                    </li>
+                    <li className="p-2 hover:bg-gray-100 cursor-pointer">
+                      Credit cards
+                    </li>
+                    <li className="p-2 hover:bg-gray-100 cursor-pointer">
+                      My Auctions
+                    </li>
+                    <li className="p-2 hover:bg-gray-100 cursor-pointer">
+                      Invite colleagues
+                    </li>
+                    <li className="p-2 hover:bg-gray-100 cursor-pointer">
+                      Notifications
+                    </li>
+                    <li className="p-2 hover:bg-gray-100 cursor-pointer">
+                      Community
+                    </li>
+                    <li className="p-2 hover:bg-gray-100 cursor-pointer">
+                      Support
+                    </li>
+                    <li className="p-2 hover:bg-gray-100 cursor-pointer">
+                      API
+                    </li>
+                  </ul>
+                  <hr /> */}
+                  <div
+                    className="p-4 text-red-500 cursor-pointer hover:bg-gray-100"
+                    onClick={onSignout}
+                  >
+                    Log out
                   </div>
                 </div>
-                <hr />
-                <ul className="p-4">
-                  <li className="p-2 hover:bg-gray-100 cursor-pointer">
-                    View profile
-                  </li>
-                  <li className="p-2 hover:bg-gray-100 cursor-pointer">
-                    Settings
-                  </li>
-                  <li className="p-2 hover:bg-gray-100 cursor-pointer">
-                    My bids
-                  </li>
-                  <li className="p-2 hover:bg-gray-100 cursor-pointer">
-                    Credit cards
-                  </li>
-                  <li className="p-2 hover:bg-gray-100 cursor-pointer">
-                    My Auctions
-                  </li>
-                  <li className="p-2 hover:bg-gray-100 cursor-pointer">
-                    Invite colleagues
-                  </li>
-                  <li className="p-2 hover:bg-gray-100 cursor-pointer">
-                    Notifications
-                  </li>
-                  <li className="p-2 hover:bg-gray-100 cursor-pointer">
-                    Community
-                  </li>
-                  <li className="p-2 hover:bg-gray-100 cursor-pointer">
-                    Support
-                  </li>
-                  <li className="p-2 hover:bg-gray-100 cursor-pointer">API</li>
-                </ul>
-                <hr />
-                <div
-                  className="p-4 text-red-500 cursor-pointer hover:bg-gray-100"
-                  onClick={onSignout}
-                >
-                  Log out
-                </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         ) : (
           <Link
