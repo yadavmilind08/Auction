@@ -5,6 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 import signupSceneImage from "../../assets/images/signup-scene.svg";
 import { post } from "../../services/api";
 import { IUser } from "../../types/User";
+import { useState } from "react";
+import ButtonLoader from "../../components/Loader/ButtonLoader";
 
 // Define validation schema using yup
 const schema = yup.object().shape({
@@ -21,6 +23,7 @@ const schema = yup.object().shape({
 
 const Signup = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const {
     register,
@@ -32,6 +35,8 @@ const Signup = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
+    setLoading(true);
+
     try {
       const response = await post("/account/register", {
         username: data.userName,
@@ -44,7 +49,8 @@ const Signup = () => {
       }
     } catch (error) {
       console.error("Registration failed:", error);
-      // Handle error (e.g., show error message)
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -135,6 +141,11 @@ const Signup = () => {
                   type="submit"
                   className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
+                  {loading && (
+                    <span className="mr-2">
+                      <ButtonLoader />
+                    </span>
+                  )}{" "}
                   Submit
                 </button>
               </div>

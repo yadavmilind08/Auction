@@ -8,6 +8,7 @@ import { post } from "../../services/api";
 import { IUser } from "../../types/User";
 import { useAuth } from "../../hooks/useAuth";
 import useUserStore from "../../store/useUserStore";
+import ButtonLoader from "../../components/Loader/ButtonLoader";
 
 const schema = yup.object().shape({
   email: yup
@@ -25,6 +26,7 @@ const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
   const setUser = useUserStore((state) => state.setUser);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const {
     register,
@@ -37,6 +39,7 @@ const Login = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
     setErrorMessage(null);
+    setLoading(true);
 
     try {
       const response = await post("/account/login", {
@@ -55,6 +58,8 @@ const Login = () => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       setErrorMessage("Login failed. Please check your credentials.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -134,8 +139,13 @@ const Login = () => {
               <div>
                 <button
                   type="submit"
-                  className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  className="flex w-full justify-center text-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
+                  {loading && (
+                    <span className="mr-2">
+                      <ButtonLoader />
+                    </span>
+                  )}{" "}
                   Continue
                 </button>
               </div>

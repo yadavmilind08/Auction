@@ -4,9 +4,11 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { IAuctionItem } from "../../types/AuctionItem";
 import { calculateTimeDifference } from "../../utility/auction";
+import ButtonLoader from "../../components/Loader/ButtonLoader";
 
 type BidModalProps = {
   show: boolean;
+  loading: boolean;
   auctionItem: IAuctionItem;
   onClose: () => void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -33,6 +35,7 @@ const schema = yup.object().shape({
 
 const SubmitBidModal = ({
   show,
+  loading,
   onClose,
   auctionItem,
   onSubmitBid,
@@ -145,6 +148,11 @@ const SubmitBidModal = ({
               type="submit"
               className="px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700"
             >
+              {loading && (
+                <span className="mr-2">
+                  <ButtonLoader />
+                </span>
+              )}{" "}
               Submit
             </button>
           </div>

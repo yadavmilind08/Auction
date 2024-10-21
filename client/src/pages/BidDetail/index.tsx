@@ -30,11 +30,12 @@ const BidDetail = () => {
     };
 
     fetchAuctionItem();
-  }, [id]);
+  }, [id, auctionItem?.currentBid]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleBidSubmit = async (data: any) => {
-    console.log({ data });
+    setLoading(true);
+
     try {
       const response = await post(`/auctionItems/${id}/bids`, {
         amount: data.straightBid,
@@ -55,6 +56,8 @@ const BidDetail = () => {
       });
     } catch (error) {
       console.error("Error placing bid:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -171,6 +174,7 @@ const BidDetail = () => {
           {auctionItem && showModal && (
             <SubmitBidModal
               show={showModal}
+              loading={loading}
               onClose={() => setShowModal(false)}
               auctionItem={auctionItem}
               onSubmitBid={handleBidSubmit}
