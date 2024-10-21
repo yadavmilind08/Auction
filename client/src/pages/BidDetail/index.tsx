@@ -154,7 +154,7 @@ const BidDetail = () => {
                 {auctionItem?.bids
                   ?.sort((a, b) => b.amount - a.amount)
                   ?.map((bid: IBidItem) => (
-                    <li className="text-gray-700">
+                    <li key={bid.id} className="text-gray-700">
                       User {bid.userId} bids ${bid.amount}
                     </li>
                   ))}
